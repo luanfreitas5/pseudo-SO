@@ -5,7 +5,7 @@
 import moduloProcessos as proc
 
 
-class LeitorArquvo:
+class LeitorArquivo:
     """
         Classe dos métodos de leitura dos dados
     """

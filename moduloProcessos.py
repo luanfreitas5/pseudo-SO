@@ -8,7 +8,7 @@ from moduloMemoria  import Memoria
 from moduloArquivos import GerenciadorArquivos
 from moduloRecursos import Recurso
 from moduloFilas import Fila
-from moduloEntradaSaida import LeitorArquvo, Impressao
+from moduloEntradaSaida import LeitorArquivo, Impressao
 
 TAMANHO_MAXIMO_PROCESSOS = 1000
 TAMANHO_PROCESSO_REAL = 64
@@ -67,7 +67,7 @@ class GerenciadorProcessos:
         self.memoria = Memoria()
         self.recurso = Recurso()
         self.impressao = Impressao()
-        self.leitor_arquvo = LeitorArquvo()
+        self.leitor_arquivo = LeitorArquivo()
         self.gerenciador_arquivo = None
 
     def verificar_tamanho_processo(self):
@@ -98,9 +98,9 @@ class GerenciadorProcessos:
         arquivo_file = "files.txt"
         
         # abre o arquivo para leitura e gera um lista de processos.
-        self.fila.lista_processo_pronto = self.leitor_arquvo.leitura_arquivo_processos(arquivo_processo)
+        self.fila.lista_processo_pronto = self.leitor_arquivo.leitura_arquivo_processos(arquivo_processo)
         
-        [lista_arquivos, lista_operacoes] = self.leitor_arquvo.leitura_arquivo_file(arquivo_file)
+        [lista_arquivos, lista_operacoes] = self.leitor_arquivo.leitura_arquivo_file(arquivo_file)
         
         self.gerenciador_arquivo = GerenciadorArquivos(lista_arquivos)
         
@@ -194,7 +194,8 @@ class GerenciadorProcessos:
                                 contador = 1
                                 mensagem_cpu = "P{} instruction {}".format(processo.pid, sequencia_execucao)
                                 mensagem_cpu += " - Sucesso CPU!\n"
-                                self.impressao.log_operacao.append(mensagem_cpu) 
+                                self.impressao.log_operacao.append(mensagem_cpu)
+                                
                         else:
                             numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][3]
                            

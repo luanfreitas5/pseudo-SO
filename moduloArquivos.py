@@ -63,7 +63,7 @@ class GerenciadorArquivos:
         string += "|"
         return string
 
-    def executar_operacao(self, processo, sequencia_geral,):
+    def executar_operacao(self, processo, sequencia_geral):
         """
             Metodo responsável por executar_operacao as intrucoes do processo com base na 
             execucao atual e posicao do lista de instrucoes.
@@ -120,7 +120,7 @@ class GerenciadorArquivos:
                     else:
                         mensagem = "P{} instruction {}".format(processo.pid, numero_operacao_processo_atual)
                         mensagem += " - Falha!\n"
-                        mensagem += "O processo {} não pode deletar o arquivo {} porque não existe esse arquivo.\n".format(processo.pid, nome_arquivo)
+                        mensagem += "O processo {} não pode deletar o arquivo {} porque não é criador do arquivo.\n".format(processo.pid, nome_arquivo)
                 else:
                     mensagem = "P{} instruction {}".format(processo.pid, numero_operacao_processo_atual)
                     mensagem += " - Falha!\n"
