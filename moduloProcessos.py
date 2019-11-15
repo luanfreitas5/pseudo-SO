@@ -211,6 +211,7 @@ class GerenciadorProcessos:
                 sequencia_execucao += 1
            
             self.impressao.imprimir_log()
+            self.fila.lista_processo_pronto.remove(processo)
             print("P{} return SIGINT".format(processo.pid))
             self.memoria.liberar_memoria_sistema(processo)
         
