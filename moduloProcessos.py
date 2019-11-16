@@ -163,10 +163,11 @@ class GerenciadorProcessos:
             self.fila.alterar_fila_prioridade_usuario(tempo_execucao)
            
             # adiciona os processos na fila de processos de real e de usuario
-            lista_processo_0_espera = self.memoria.verificar_disponibilidade_memoria_real(self.fila, self.recurso)   
+            lista_processo_0_espera = self.memoria.verificar_disponibilidade_memoria_real(self.fila, self.recurso)
             lista_processo_1_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila,
                                                                                                      self.recurso,
                                                                                                      tipo_lista=1)
+            print(lista_processo_1_espera)
             lista_processo_2_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila,
                                                                                                      self.recurso,
                                                                                                      tipo_lista=2)
@@ -214,22 +215,26 @@ class GerenciadorProcessos:
         self.impressao.imprimir_mapa_disco(self.gerenciador_arquivo) 
 
     def executar_operacao_processo(self, lista_processo_pronto):
+
         """
             Responsável por executar_operacao processos de tempo-real
         """
+
         quantidade_processo_executado = 0
-        contador = 0;
+        contador = 0
         
-        for processo in lista_processo_pronto:  
+        for processo in lista_processo_pronto:
+
             quantidade_processo_executado += 1
-            sequencia_execucao = 0;
+            sequencia_execucao = 0
             self.impressao.imprimir_dispatcher(processo)
             self.impressao.log_operacao.clear()
             print("\nProcesso {}\n".format(processo.pid))
             print("P{} STARTED\n".format(processo.pid))
+
             for instrucao in processo.lista_instrucoes:
               
-                if (sequencia_execucao <= len(instrucao)):
+                if sequencia_execucao <= len(instrucao):
                    
                     if sequencia_execucao >= processo.tempo_processador:
                         numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][4]
@@ -237,13 +242,13 @@ class GerenciadorProcessos:
                         mensagem += " - Falha!\n"
                         mensagem += "O processo {} esgotou o seu tempo de CPU!\n".format(processo.pid)
                         self.impressao.log_operacao.append(mensagem)
-                    else : 
+                    else:
                         instrucao = processo.lista_instrucoes[sequencia_execucao][1]
                        
-                        if (instrucao == 0):
+                        if instrucao == 0:
                             numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][4]
                             
-                            if (numero_operacao_processo != sequencia_execucao + contador):
+                            if numero_operacao_processo != sequencia_execucao + contador:
                                 contador = 1
                                 mensagem_cpu = "P{} instruction {}".format(processo.pid, sequencia_execucao)
                                 mensagem_cpu += " - Sucesso CPU!\n"
@@ -252,7 +257,7 @@ class GerenciadorProcessos:
                         else:
                             numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][3]
                            
-                            if (numero_operacao_processo != sequencia_execucao + contador):
+                            if numero_operacao_processo != sequencia_execucao + contador:
                                 contador = 1
                                 mensagem_cpu = "P{} instruction {}".format(processo.pid, sequencia_execucao)
                                 mensagem_cpu += " - Sucesso CPU!\n"   
@@ -262,11 +267,20 @@ class GerenciadorProcessos:
                         self.impressao.log_operacao.append(resultado) 
             
                 sequencia_execucao += 1
-           
+
+            if not processo.lista_instrucoes:
+
+                contador = 1
+
+                for contador in range(processo.tempo_processador):
+
+                    mensagem_cpu = "P{} instruction {}".format(processo.pid, contador)
+                    mensagem_cpu += " - Sucesso CPU!\n"
+                    self.impressao.log_operacao.append(mensagem_cpu)
+
             self.impressao.imprimir_log()
             self.fila.lista_processo_pronto.remove(processo)
             print("P{} return SIGINT".format(processo.pid))
             self.memoria.liberar_memoria_sistema(processo)
         
         return quantidade_processo_executado
-

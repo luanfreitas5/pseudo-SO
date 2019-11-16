@@ -74,6 +74,10 @@ class Memoria:
 
                     lista_fila_espera.append(processo_usuario)
 
+            else:
+
+                lista_fila_espera.append(processo_usuario)
+
         return lista_fila_espera
 
     def verificar_dispobilidade_memoria(self, processo):
