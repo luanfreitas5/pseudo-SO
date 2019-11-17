@@ -87,7 +87,6 @@ class Fila:
             if processo.prioridade == 2 and not self.lista_prioridade_2:
                
                 if processo.tempo_inicializacao + 10 <= tempo_execucao :
-                    processo.lista_prioridade = True
                     self.lista_prioridade_1.append(processo)
                 
                 elif processo.tempo_inicializacao + 20 < tempo_execucao:
@@ -96,5 +95,5 @@ class Fila:
             if processo.prioridade == 3 and not self.lista_prioridade_3 and existe_processo_prioridade_2 == False:
                
                 if processo.tempo_inicializacao + 10 <= tempo_execucao:
-                    processo.lista_prioridade = True
+                    self.lista_prioridade_2.append(processo)
                     
