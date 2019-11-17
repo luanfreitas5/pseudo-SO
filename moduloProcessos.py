@@ -34,7 +34,7 @@ class Processo:
         self.codigo_disco = processo[7]
         self.pid = None
         self.lista_instrucoes = []
-        self.posicao_bloco_disco=0
+        self.posicao_bloco_disco = 0
 
     def setar_instrucao(self, lista_instrucoes):
         """
@@ -46,7 +46,7 @@ class Processo:
             if self.pid == int(instrucao[0]):
                 # codigo de operação = 0 criar  ou  1 deletar
                 if int(instrucao[1]) == 0:
-                    self.lista_instrucoes.append([int(instrucao[0]), int(instrucao[1]),  instrucao[2].strip(" "), int(instrucao[3]), int(instrucao[4]) ])
+                    self.lista_instrucoes.append([int(instrucao[0]), int(instrucao[1]), instrucao[2].strip(" "), int(instrucao[3]), int(instrucao[4]) ])
                 else:
                     self.lista_instrucoes.append([int(instrucao[0]), int(instrucao[1]), instrucao[2].strip(" "), int(instrucao[3])])
 
@@ -75,7 +75,6 @@ class GerenciadorProcessos:
         self.lista_processo_pronto = []
 
     def verificar_tamanho_processo(self):
-    
  
         """
             Verifica se todos os processos requisitam moduloMemoria sem extrapolar o valor
@@ -113,8 +112,7 @@ class GerenciadorProcessos:
 
         else:
             arquivo_processo = "processes_0.txt"
-            arquivo_file = "files_0.txt"        
-
+            arquivo_file = "files_0.txt"
         
         # Abre o arquivo para leitura e gera um lista de processos.
         self.lista_processo_pronto = self.leitor_arquivo.leitura_arquivo_processos(arquivo_processo)
@@ -135,31 +133,30 @@ class GerenciadorProcessos:
         tempo_execucao = 1;
         
         while(True):
-            #print(tempo_execucao)
+            # print(tempo_execucao)
             self.lista_processo_usuario_execucao = []
             self.lista_processo_sistema_execucao = []
             
             self.fila.inicializar_fila()
         
             # Ordena a fila de prioridade dos processos tem como prioridade maior os processos de sistema
-            self.fila.ordenar_filas_prioridade(self.lista_processo_pronto,tempo_execucao)
+            self.fila.ordenar_filas_prioridade(self.lista_processo_pronto, tempo_execucao)
          
             # Altera prioridade dos processos que estão esperando muito para serem executado na fila de prioridade de usuário.
-            self.fila.alterar_fila_prioridade_usuario(tempo_execucao)
+            self.fila.alterar_fila_prioridade_usuario(self.lista_processo_pronto, tempo_execucao)
            
             # Adiciona os processos na fila de processos de real e de usuario
            
-            if len(self.fila.lista_prioridade_0)> 0:
-                self.memoria.verificar_disponibilidade_memoria_real(self.fila.lista_prioridade_0,self.lista_processo_sistema_execucao)   
+            if len(self.fila.lista_prioridade_0) > 0:
+                self.memoria.verificar_disponibilidade_memoria_real(self.fila.lista_prioridade_0, self.lista_processo_sistema_execucao)   
             
-            if len(self.fila.lista_prioridade_1)> 0:
+            if len(self.fila.lista_prioridade_1) > 0:
                 self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila.lista_prioridade_1, self.lista_processo_usuario_execucao, self.recurso)   
-            if len(self.fila.lista_prioridade_2)> 0:
-                self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila.lista_prioridade_2, self.lista_processo_usuario_execucao,self.recurso)    
+            if len(self.fila.lista_prioridade_2) > 0:
+                self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila.lista_prioridade_2, self.lista_processo_usuario_execucao, self.recurso)    
             
-            if len(self.fila.lista_prioridade_3)> 0:
-                self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila.lista_prioridade_3,self.lista_processo_usuario_execucao, self.recurso)   
-            
+            if len(self.fila.lista_prioridade_3) > 0:
+                self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila.lista_prioridade_3, self.lista_processo_usuario_execucao, self.recurso)   
             
             if len(self.lista_processo_sistema_execucao) > 0 :
                 quantidade_processo_sistema_excutado += self.executar_operacao_processo(self.lista_processo_sistema_execucao)
@@ -176,15 +173,13 @@ class GerenciadorProcessos:
             # Aumenta o tempo de execução
             tempo_execucao += 1
             
-            
             if(self.quantidade_processo == (quantidade_processo_sistema_excutado + quantidade_processo_usuario_executado)):
                 break
             
             if((quantidade_processo_sistema_excutado + quantidade_processo_usuario_executado) >= TAMANHO_MAXIMO_PROCESSOS):
                 break
 
-
-    def executar_operacao_processo(self,lista_processo_execucao):
+    def executar_operacao_processo(self, lista_processo_execucao):
         """
             Responsável por executar_operacao processos de tempo-real
         """
@@ -214,7 +209,7 @@ class GerenciadorProcessos:
                         instrucao = processo.lista_instrucoes[sequencia_execucao][1]
                        
                         # verificar precisa executar a CPU, conforme a especificação
-                        if instrucao == 0: #criar arquivo
+                        if instrucao == 0:  # criar arquivo
                             numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][4]
                             
                             if numero_operacao_processo != sequencia_execucao + contador:
@@ -223,7 +218,7 @@ class GerenciadorProcessos:
                                 mensagem_cpu += " - Sucesso CPU!\n"
                                 self.impressao.log_operacao.append(mensagem_cpu)
                                 
-                        else:#deletar arquivo
+                        else:  # deletar arquivo
                             numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][3]
                            
                             if numero_operacao_processo != sequencia_execucao + contador:
@@ -236,7 +231,6 @@ class GerenciadorProcessos:
                         self.impressao.log_operacao.append(resultado) 
             
                 sequencia_execucao += 1
-           
             
             if not processo.lista_instrucoes:
                 contador = 1
@@ -244,12 +238,8 @@ class GerenciadorProcessos:
                     mensagem_cpu = "P{} instruction {}".format(processo.pid, contador)
                     mensagem_cpu += " - Sucesso CPU!\n"
                     self.impressao.log_operacao.append(mensagem_cpu)
-                    
             
             self.impressao.imprimir_log()
-            
-            # alteração do vinicuis
-            # correto  porque deve retirar já executado
             self.lista_processo_pronto.remove(processo)
             print("P{} return SIGINT".format(processo.pid))
             self.memoria.liberar_memoria_sistema(processo)
