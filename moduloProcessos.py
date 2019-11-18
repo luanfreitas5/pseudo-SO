@@ -133,7 +133,6 @@ class GerenciadorProcessos:
         tempo_execucao = 1;
         
         while(True):
-            print(tempo_execucao)
             self.lista_processo_usuario_execucao = []
             self.lista_processo_sistema_execucao = []
             
